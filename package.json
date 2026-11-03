@@ -1,0 +1,44 @@
+{
+  "name": "express-typescript-habit",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Mohammed-M8/express-typescript-habit#readme",
+  "bugs": {
+    "url": "https://github.com/Mohammed-M8/express-typescript-habit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mohammed-M8/express-typescript-habit.git"
+  },
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "run": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.12.1",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "prisma": "^7.10.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
