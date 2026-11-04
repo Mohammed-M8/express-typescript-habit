@@ -12,3 +12,32 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id           String   @id @default(uuid())
+  name         String   @db.VarChar(30)
+  email        String   @unique @db.VarChar(255)
+  passwordHash String
+  habits       Habit[]
+  createdAt    DateTime @default(now())
+}
+
+model Habit {
+  id          String       @id @default(uuid())
+  title       String       @db.VarChar(30)
+  description String?      @db.VarChar(100)
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  completions Completion[]
+
+  @@index([userId])
+}
+
+model Completion {
+  id        String   @id @default(uuid())
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  day       DateTime @db.Date
+  createdAt DateTime @default(now())
+
+  @@unique([habitId, day])
+}
