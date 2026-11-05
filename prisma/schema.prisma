@@ -19,6 +19,7 @@ model User {
   passwordHash String
   habits       Habit[]
   createdAt    DateTime @default(now())
+  refreshTokens RefreshToken[]
 }
 
 model Habit {
@@ -40,4 +41,13 @@ model Completion {
   createdAt DateTime @default(now())
 
   @@unique([habitId, day])
+}
+
+model RefreshToken {
+  id String @id @default(uuid())
+  tokenHash String @unique
+  userId String
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  expiresAt DateTime 
+  revokedAt DateTime?
 }
