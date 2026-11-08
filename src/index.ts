@@ -3,10 +3,12 @@ import morgan from 'morgan'
 import authRouter from './routes/authRouter'
 import 'dotenv/config'
 import path from 'path'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(cookieParser())
 app.use(express.json())
 app.use(morgan('dev'))
 

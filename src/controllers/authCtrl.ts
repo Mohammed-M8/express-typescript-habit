@@ -12,8 +12,8 @@ const DUMMY_HASH = bcrypt.hashSync(crypto.randomBytes(32).toString('hex'), SALT_
 
 const registerUserSchema = z.object({
     name: z.string().nonempty().max(30),
-    email: z.email().nonempty().max(255),
-    password: z.string().nonempty().min(8),
+    email: z.email().trim().toLowerCase().nonempty().max(255),
+    password: z.string().min(8).max(72),
 })
 
 const loginUserSchema = registerUserSchema.omit({ name: true })
@@ -71,40 +71,43 @@ const login = async (req: Request, res: Response) => {
 
 }
 
-const refresh=async (req:Request,res:Response)=>{
-    const token=getRefreshToken(req)
-    if(!token) return res.sendStatus(401)
-    
-    const stored=await prisma.refreshToken.findUnique({
-        where:{tokenHash:generateRefreshTokenHash(token)}
+const refresh = async (req: Request, res: Response) => {
+    const token = getRefreshToken(req)
+    if (!token) return res.sendStatus(401)
+
+    const stored = await prisma.refreshToken.findUnique({
+        where: { tokenHash: generateRefreshTokenHash(token) }
     })
-    if(!stored||stored.expiresAt<new Date()) return res.sendStatus(401)
-    if(stored.revokedAt){
+    if (!stored ) return res.sendStatus(401)
+    if (stored.revokedAt) {
         await prisma.refreshToken.deleteMany({
-            where:{userId:stored.userId}
+            where: { userId: stored.userId }
         })
+
+        return res.sendStatus(403)
     }
 
+    if (stored.expiresAt < new Date()) return res.sendStatus(401)
 
     await prisma.refreshToken.update({
-        where:{id:stored.id},
-        data:{revokedAt:new Date()}
+        where: { id: stored.id },
+        data: { revokedAt: new Date() }
     })
 
-    const payload=await issueTokens(stored.userId,req,res)
+    const payload = await issueTokens(stored.userId, req, res)
     return res.status(200).send(payload)
 }
 
-const logout=async(req:Request,res:Response)=>{
-    const token=getRefreshToken(req)
+const logout = async (req: Request, res: Response) => {
+    const token = getRefreshToken(req)
 
-    if(token){
+    if (token) {
         await prisma.refreshToken.deleteMany({
-            where:{tokenHash:generateRefreshTokenHash(token)}
+            where: { tokenHash: generateRefreshTokenHash(token) }
         })
     }
- res.clearCookie('refreshToken',{path:'/auth'})
+    res.clearCookie('refreshToken', { path: '/auth' })
     res.sendStatus(204)
 }
 
-export { register, login,refresh }
+export { register, login, refresh, logout }

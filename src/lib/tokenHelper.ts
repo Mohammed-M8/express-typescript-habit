@@ -57,7 +57,7 @@ const issueTokens = async (id: string, req: Request, res: Response) => {
 }
 
 const getRefreshToken = (req: Request) => {
-    const raw = req.headers["x-client-type"] === "mobile" ? req.body.refreshToken : req.cookies.refreshToken
+    const raw = req.headers["x-client-type"] === "mobile" ? req.body?.refreshToken : req.cookies?.refreshToken
     const parsed = refreshTokenSchema.safeParse(raw)
 
     return parsed.success ? parsed.data : null
