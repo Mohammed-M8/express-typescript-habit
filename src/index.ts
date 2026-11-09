@@ -1,10 +1,14 @@
 import express, { Request, Response } from 'express'
 import morgan from 'morgan'
-import authRouter from './routes/authRouter'
 import 'dotenv/config'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 import { cleanupTokens } from './lib/cleanup'
+
+import authRouter from './routes/authRouter'
+import usersRouter from './routes/usersRouter'
+import habitsRouter from './routes/habitsRouter'
+import { isSignedIn } from './middlewares/isSignedIn'
 
 const app = express()
 
@@ -18,12 +22,17 @@ app.use(morgan('dev'))
 const PORT = process.env.PORT ? process.env.PORT : 3000
 
 
-
-app.use('/auth', authRouter)
-
 app.get('/health', (req: Request, res: Response) => {
     res.send("Active!")
 })
+
+
+
+app.use('/auth', authRouter)
+app.use(isSignedIn)
+app.use('/users', usersRouter)
+app.use('/habits',habitsRouter)
+
 
 app.listen(PORT, () => {
     console.log(`Server is listening on ${PORT}`)
@@ -31,4 +40,4 @@ app.listen(PORT, () => {
 
 cleanupTokens().catch(console.error)
 
-setInterval(()=>cleanupTokens().catch(console.error),24*60*60*1000)
+setInterval(() => cleanupTokens().catch(console.error), 24 * 60 * 60 * 1000)
