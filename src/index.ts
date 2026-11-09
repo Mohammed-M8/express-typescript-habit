@@ -4,6 +4,7 @@ import authRouter from './routes/authRouter'
 import 'dotenv/config'
 import path from 'path'
 import cookieParser from 'cookie-parser'
+import { cleanupTokens } from './lib/cleanup'
 
 const app = express()
 
@@ -27,3 +28,7 @@ app.get('/health', (req: Request, res: Response) => {
 app.listen(PORT, () => {
     console.log(`Server is listening on ${PORT}`)
 })
+
+cleanupTokens().catch(console.error)
+
+setInterval(()=>cleanupTokens().catch(console.error),24*60*60*1000)
