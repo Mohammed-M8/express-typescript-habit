@@ -5,8 +5,8 @@ const router=express.Router()
 
 router.get('',habitsCtrl.getHabits)
 router.post('',habitsCtrl.createHabit)
-router.get(':id',habitsCtrl.getHabit)
-// router.put(':id')
+router.get('/:id',habitsCtrl.getHabit)
+router.put('/:id',habitsCtrl.updateHabit)
 // router.delete(':id')
 
 
