@@ -86,6 +86,17 @@ const updateHabit = async (req: Request<{ id: string }>, res: Response) => {
 
 }
 
+const deleteHabit = async (req: Request<{ id: string }>, res: Response) => {
+    const { id } = req.params
+
+    const result = await prisma.habit.deleteMany({
+        where: { id: id, userId: req.userId }
+    })
+
+    if (result.count === 0) return res.status(404).send({ error: "Habit not found" })
+
+    return res.sendStatus(204)
+}
 
 
-export default { getHabits, createHabit, getHabit, updateHabit }
+export default { getHabits, createHabit, getHabit, updateHabit,deleteHabit }
