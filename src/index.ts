@@ -9,6 +9,7 @@ import authRouter from './routes/authRouter'
 import usersRouter from './routes/usersRouter'
 import habitsRouter from './routes/habitsRouter'
 import { isSignedIn } from './middlewares/isSignedIn'
+import { errorHandler } from './middlewares/errorhandler'
 
 const app = express()
 
@@ -31,7 +32,8 @@ app.get('/health', (req: Request, res: Response) => {
 app.use('/auth', authRouter)
 app.use(isSignedIn)
 app.use('/users', usersRouter)
-app.use('/habits',habitsRouter)
+app.use('/habits', habitsRouter)
+app.use(errorHandler)
 
 
 app.listen(PORT, () => {
