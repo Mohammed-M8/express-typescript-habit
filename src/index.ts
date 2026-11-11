@@ -8,6 +8,8 @@ import { cleanupTokens } from './lib/cleanup'
 import authRouter from './routes/authRouter'
 import usersRouter from './routes/usersRouter'
 import habitsRouter from './routes/habitsRouter'
+import completionsRouter from './routes/completionsRouter'
+
 import { isSignedIn } from './middlewares/isSignedIn'
 import { errorHandler } from './middlewares/errorhandler'
 
@@ -33,6 +35,7 @@ app.use('/auth', authRouter)
 app.use(isSignedIn)
 app.use('/users', usersRouter)
 app.use('/habits', habitsRouter)
+app.use('/habits/:id/completions',completionsRouter)
 app.use(errorHandler)
 
 

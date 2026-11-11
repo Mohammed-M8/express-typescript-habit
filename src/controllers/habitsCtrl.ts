@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import z from "zod";
 import { prisma } from "../lib/prisma";
+import { parseId } from "../lib/validation";
 
 const createHabitSchema = z.object({
     title: z.string().trim().min(1).max(30),
     description: z.string().trim().max(256).optional(),
 })
 
-const idSchema = z.uuid()
 
 const getHabits = async (req: Request, res: Response) => {
     const habits = await prisma.habit.findMany({
@@ -101,9 +101,7 @@ const deleteHabit = async (req: Request<{ id: string }>, res: Response) => {
     return res.sendStatus(204)
 }
 
-const parseId = (id: string | undefined) => {
-    return idSchema.safeParse(id)
-}
+
 
 
 export default { getHabits, createHabit, getHabit, updateHabit, deleteHabit }
