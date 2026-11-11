@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import z from "zod";
 import { prisma } from "../lib/prisma";
-import { error } from "node:console";
 
 const createHabitSchema = z.object({
-    title: z.string().min(1).max(30),
-    description: z.string().max(256).optional(),
+    title: z.string().trim().min(1).max(30),
+    description: z.string().trim().max(256).optional(),
 })
+
+const idSchema = z.uuid()
 
 const getHabits = async (req: Request, res: Response) => {
     const habits = await prisma.habit.findMany({
@@ -18,7 +19,7 @@ const getHabits = async (req: Request, res: Response) => {
         }
     })
 
-    res.status(200).send(habits)
+    return res.status(200).send(habits)
 }
 
 
@@ -46,9 +47,9 @@ const createHabit = async (req: Request, res: Response) => {
 }
 
 const getHabit = async (req: Request<{ id: string }>, res: Response) => {
-    const { id } = req.params
-    if (!id) return res.status(400).send({ error: "Missing Habit Id" })
-
+    const params = parseId(req.params.id)
+    if (!params.success) return res.status(400).send({ error: "Missing Habit Id" })
+    const id = params.data
     const habit = await prisma.habit.findFirst({
         where: {
             id: id,
@@ -67,10 +68,11 @@ const getHabit = async (req: Request<{ id: string }>, res: Response) => {
 }
 
 const updateHabit = async (req: Request<{ id: string }>, res: Response) => {
-    const { id } = req.params
-    if (!id) return res.status(400).send({ error: "Missing Habit Id" })
+    const params = parseId(req.params.id)
+    if (!params.success) return res.status(400).send({ error: "Missing Habit Id" })
+    const id = params.data
     const body = createHabitSchema.safeParse(req.body)
-    if (!body.success) return res.status(400).send({ error: "Invalid Body" })
+    if (!body.success) return res.status(400).send({ error: body.error.message })
     const { title, description } = body.data
     const habit = await prisma.habit.updateMany({
         where: { id: id, userId: req.userId },
@@ -87,8 +89,9 @@ const updateHabit = async (req: Request<{ id: string }>, res: Response) => {
 }
 
 const deleteHabit = async (req: Request<{ id: string }>, res: Response) => {
-    const { id } = req.params
-
+    const params = parseId(req.params.id)
+    if (!params.success) return res.status(400).send({ error: "Missing Habit Id" })
+    const id = params.data
     const result = await prisma.habit.deleteMany({
         where: { id: id, userId: req.userId }
     })
@@ -98,5 +101,9 @@ const deleteHabit = async (req: Request<{ id: string }>, res: Response) => {
     return res.sendStatus(204)
 }
 
+const parseId = (id: string | undefined) => {
+    return idSchema.safeParse(id)
+}
 
-export default { getHabits, createHabit, getHabit, updateHabit,deleteHabit }
+
+export default { getHabits, createHabit, getHabit, updateHabit, deleteHabit }
