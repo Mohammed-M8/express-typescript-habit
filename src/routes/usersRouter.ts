@@ -1,6 +1,6 @@
 import express from 'express'
-import { isSignedIn } from '../middlewares/isSignedIn'
-import * as usersCtrl from '../controllers/usersCtrl'
+import { isSignedIn } from '../middlewares/isSignedIn.js'
+import * as usersCtrl from '../controllers/usersCtrl.js'
 const router=express.Router()
 
 router.get('/me',usersCtrl.getUser)

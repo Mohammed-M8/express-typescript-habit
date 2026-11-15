@@ -3,15 +3,15 @@ import morgan from 'morgan'
 import 'dotenv/config'
 import path from 'path'
 import cookieParser from 'cookie-parser'
-import { cleanupTokens } from './lib/cleanup'
+import { cleanupTokens } from './lib/cleanup.js'
 
-import authRouter from './routes/authRouter'
-import usersRouter from './routes/usersRouter'
-import habitsRouter from './routes/habitsRouter'
-import completionsRouter from './routes/completionsRouter'
+import authRouter from './routes/authRouter.js'
+import usersRouter from './routes/usersRouter.js'
+import habitsRouter from './routes/habitsRouter.js'
+import completionsRouter from './routes/completionsRouter.js'
 
-import { isSignedIn } from './middlewares/isSignedIn'
-import { errorHandler } from './middlewares/errorhandler'
+import { isSignedIn } from './middlewares/isSignedIn.js'
+import { errorHandler } from './middlewares/errorhandler.js'
 
 const app = express()
 

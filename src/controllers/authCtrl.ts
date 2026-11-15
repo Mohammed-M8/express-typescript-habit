@@ -2,10 +2,10 @@ import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import 'dotenv/config'
 import { Request, Response } from 'express'
-import { prisma } from '../lib/prisma'
+import { prisma } from '../lib/prisma.js'
 import z from 'zod'
-import { generateRefreshTokenHash, getRefreshToken, issueTokens } from '../lib/tokenHelper'
-import { Prisma } from '../../generated/prisma/client'
+import { generateRefreshTokenHash, getRefreshToken, issueTokens } from '../lib/tokenHelper.js'
+import { Prisma } from '../generated/prisma/client.js'
 
 const SALT_ROUNDS = 10
 const DUMMY_HASH = bcrypt.hashSync(crypto.randomBytes(32).toString('hex'), SALT_ROUNDS)
@@ -39,6 +39,7 @@ const register = async (req: Request, res: Response,) => {
 
 
     } catch (e) {
+
         if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
             return res.status(409).send('User with this email exists')
         }
@@ -78,7 +79,7 @@ const refresh = async (req: Request, res: Response) => {
     const stored = await prisma.refreshToken.findUnique({
         where: { tokenHash: generateRefreshTokenHash(token) }
     })
-    if (!stored ) return res.sendStatus(401)
+    if (!stored) return res.sendStatus(401)
     if (stored.revokedAt) {
         await prisma.refreshToken.deleteMany({
             where: { userId: stored.userId }

@@ -1,6 +1,6 @@
 import express from 'express'
-import { isSignedIn } from '../middlewares/isSignedIn'
-import habitsCtrl from '../controllers/habitsCtrl'
+import { isSignedIn } from '../middlewares/isSignedIn.js'
+import habitsCtrl from '../controllers/habitsCtrl.js'
 const router = express.Router()
 
 router.get('', habitsCtrl.getHabits)

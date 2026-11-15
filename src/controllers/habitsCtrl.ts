@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import z from "zod";
-import { prisma } from "../lib/prisma";
-import { parseId } from "../lib/validation";
+import { prisma } from "../lib/prisma.js";
+import { parseId } from "../lib/validation.js";
 
 const createHabitSchema = z.object({
     title: z.string().trim().min(1).max(30),

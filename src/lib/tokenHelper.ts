@@ -2,7 +2,7 @@ import jsonwebtoken, { SignOptions } from 'jsonwebtoken'
 import 'dotenv/config'
 import crypto from 'crypto'
 import { Request, Response } from 'express';
-import { prisma } from './prisma';
+import { prisma } from './prisma.js';
 import z from 'zod';
 
 const REFRESH_TTL = 7 * 24 * 60 * 60 * 1000;

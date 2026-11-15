@@ -1,5 +1,5 @@
 import express from 'express'
-import * as completionsCtrl from '../controllers/completionsCtrl'
+import * as completionsCtrl from '../controllers/completionsCtrl.js'
 const router=express.Router({mergeParams:true})
 
 router.post("",completionsCtrl.createCompletion)

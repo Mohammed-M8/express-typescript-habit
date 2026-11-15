@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { parseId } from "../lib/validation";
-import { prisma } from "../lib/prisma";
+import { parseId } from "../lib/validation.js";
+import { prisma } from "../lib/prisma.js";
 import z from "zod";
 import { id } from "zod/locales";
 

@@ -1,0 +1,29 @@
+node_modules
+npm-debug.log
+
+# Secrets / env
+.env
+.env.*
+
+# Prisma generated client (regenerate in the image)
+/generated/prisma
+
+# Build output
+dist
+build
+
+# VCS and tooling
+.git
+.gitignore
+.vscode
+.idea
+
+# Docker files themselves
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Misc
+*.log
+coverage
+README.md
